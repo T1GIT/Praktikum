@@ -9,7 +9,7 @@ cvs.pack()
 
 
 # Motion settings
-accuracy = 5  # (1, 10)
+accuracy = 1  # (1, 10)
 speed = 5  # (1, 10)
 clockwise = True
 
@@ -18,7 +18,7 @@ assert 0 < accuracy < 10, "Accuracy is out of range"
 assert 0 < speed < 10, "Speed is out of range"
 assert type(clockwise) is bool, "Type of clockwise is not boolean"
 
-_step = (-1 if clockwise else 1) * (1 - accuracy / 10)
+_step = (-1 if clockwise else 1) * (4 - (accuracy / 2.5))
 _interval = round(-_step * 10 / speed * 5)
 
 
@@ -67,7 +67,7 @@ def move(obj, x_dist, y_dist, tail=False, color="black"):
     else:
         def motion():
             cvs.move(obj, x_dist, y_dist)
-    return motion
+    return motion()
 
 
 def move_to(obj, x, y, tail=False, color="black"):
@@ -86,11 +86,15 @@ def move_to(obj, x, y, tail=False, color="black"):
             half_x_obj = (x2 - x1) / 2
             half_y_obj = (y2 - y1) / 2
             cvs.moveto(obj, *raw_coor(x - half_x_obj, y + half_y_obj))
-    return motion
+    return motion()
 
 
-def loop(ani, timeout):
+def to_center(obj):
+    move_to(obj, 0, 0)
+
+
+def loop(animation):
     def loop_move():
-        ani()
-        root.after(timeout, loop_move)
+        animation()
+        root.after(_interval, loop_move)
     return loop_move()
