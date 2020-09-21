@@ -10,7 +10,7 @@ wave_freq = 20
 wave_amp = 30
 
 # Objects
-# big_ball = circle(radius=big_rad, fill='red')
+big_ball = circle(radius=big_rad, fill='red')
 small_ball = circle(x=200, radius=10)
 
 
@@ -216,8 +216,7 @@ def task_13():  # Не готово
     loop(action)
 
 
-TASK_TO_RUN = 12
-
+TASK_TO_RUN = 10
 
 eval(f'task_{TASK_TO_RUN}()')
 

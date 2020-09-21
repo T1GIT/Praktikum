@@ -9,9 +9,9 @@ cvs.pack()
 
 
 # Motion settings
-accuracy = 1  # (1, 10)
+accuracy = 9  # (1, 10)
 speed = 5  # (1, 10)
-clockwise = True
+clockwise = False
 
 # Checking parameters
 assert 0 < accuracy < 10, "Accuracy is out of range"
@@ -19,7 +19,7 @@ assert 0 < speed < 10, "Speed is out of range"
 assert type(clockwise) is bool, "Type of clockwise is not boolean"
 
 _step = (-1 if clockwise else 1) * (4 - (accuracy / 2.5))
-_interval = round(-_step * 10 / speed * 5)
+_interval = round(abs(_step) * 10 / speed * 5)
 
 
 # Axis / coordinates
