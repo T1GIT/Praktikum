@@ -53,7 +53,7 @@ def task_2():
     loop(action)
 
 
-def task_3():  # Не готово
+def task_3():
     """Nonharmonic circle sinusoid"""
     pos2 = 0
 
