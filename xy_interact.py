@@ -48,7 +48,7 @@ def circle(x=0, y=0, radius=1, fill="white", outline="black"):
     return cvs.create_oval(x1, y1, x2, y2, fill=fill, outline=outline)
 
 
-def from_polar(grad=0, processor=lambda x: x, x0=0, y0=0):
+def from_polar(grad, processor, x0=0, y0=0):
     rad = radians(grad)
     r = processor(rad)
     x = r * cos(rad) + x0
@@ -83,9 +83,9 @@ def move_to(obj, x, y, tail=False, color="black"):
     else:
         def motion():
             x1, y1, x2, y2 = cvs.coords(obj)
-            half_x_obj = (x2 - x1) / 2
-            half_y_obj = (y2 - y1) / 2
-            cvs.moveto(obj, *raw_coor(x - half_x_obj, y + half_y_obj))
+            half_size_x = (x2 - x1) / 2
+            half_size_y = (y2 - y1) / 2
+            cvs.moveto(obj, *raw_coor(x - half_size_x, y + half_size_y))
     return motion()
 
 
@@ -98,3 +98,4 @@ def loop(animation):
         animation()
         root.after(_interval, loop_move)
     return loop_move()
+
