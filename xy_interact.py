@@ -9,8 +9,8 @@ cvs.pack()
 
 
 # Motion settings
-accuracy = 9  # (1, 10)
-speed = 5  # (1, 10)
+accuracy = 6  # (1, 10)
+speed = 9  # (1, 10)
 clockwise = False
 
 # Checking parameters
