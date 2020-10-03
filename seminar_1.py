@@ -10,21 +10,9 @@ wave_freq = 20
 wave_amp = 30
 
 # Objects
-big_ball = circle(radius=big_rad, fill='red')
+big_ball = circle(radius=big_rad, fill='#ffffff')
 small_ball = circle(x=200, radius=small_rad)
 
-
-def render(processor, start_pos=0, start_in_center=False, tail=False, tail_color="black"):
-    if start_in_center:
-        to_center(small_ball)
-
-    def action():
-        nonlocal start_pos
-        x, y = from_polar(start_pos, processor)
-        move_to(small_ball, x, y, tail=tail, color=tail_color)
-        start_pos += _step
-
-    loop(action)
 
 
 # Tasks

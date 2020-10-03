@@ -1,12 +1,11 @@
 from math import sin, cos, radians, degrees
 from tkinter import *
 
-c_size = [500, 500]  # c = canvas
+c_size = [300, 300]  # c = canvas
 center = [c_size[0] / 2, c_size[1] / 2]
 root = Tk()
 cvs = Canvas(root, width=c_size[0], height=c_size[1], bg="white")
 cvs.pack()
-
 
 # Motion settings
 accuracy = 6  # (1, 10)
@@ -46,6 +45,12 @@ def circle(x=0, y=0, radius=1, fill="white", outline="black"):
     x2 = x1 + diam
     y2 = y1 + diam
     return cvs.create_oval(x1, y1, x2, y2, fill=fill, outline=outline)
+
+
+def point(x=0, y=0, raw=False, color="black"):
+    if not raw:
+        x, y = raw_coor(x, y)
+    return cvs.create_line(x, y, x+1, y, fill=color)
 
 
 def from_polar(grad, processor, x0=0, y0=0):
@@ -93,9 +98,10 @@ def to_center(obj):
     move_to(obj, 0, 0)
 
 
+# Loop
 def loop(animation):
     def loop_move():
         animation()
         root.after(_interval, loop_move)
-    return loop_move()
 
+    return loop_move()

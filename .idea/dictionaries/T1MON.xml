@@ -4,6 +4,12 @@
       <w>coor</w>
       <w>lemn</w>
       <w>nonharmonic</w>
+      <w>pmax</w>
+      <w>pmin</w>
+      <w>ppoints</w>
+      <w>qmax</w>
+      <w>qmin</w>
+      <w>qpoints</w>
     </words>
   </dictionary>
 </component>
