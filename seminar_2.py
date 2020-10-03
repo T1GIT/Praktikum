@@ -60,7 +60,7 @@ for i, row in enumerate(data):
     for j, cell in enumerate(row):
         value = int((abs(cell) / max_color) ** (1 / contrast) * 255)
         channel = {
-            0: 255 - value,
+            0: value,
             1: value,
             2: 100
         }

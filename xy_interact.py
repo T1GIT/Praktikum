@@ -1,7 +1,7 @@
 from math import sin, cos, radians, degrees
 from tkinter import *
 
-c_size = [300, 300]  # c = canvas
+c_size = [500, 500]  # c = canvas
 center = [c_size[0] / 2, c_size[1] / 2]
 root = Tk()
 cvs = Canvas(root, width=c_size[0], height=c_size[1], bg="white")
