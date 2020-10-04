@@ -1,11 +1,17 @@
 from math import sin, cos, radians, degrees
 from tkinter import *
 
-c_size = [500, 500]  # c = canvas
+c_size = [1000, 1000]  # c = canvas
 center = [c_size[0] / 2, c_size[1] / 2]
 root = Tk()
+root.wm_title("Practicum of programming")
 cvs = Canvas(root, width=c_size[0], height=c_size[1], bg="white")
-cvs.pack()
+
+xsb = Scrollbar(root, orient="horizontal", command=cvs.xview)
+ysb = Scrollbar(root, orient="vertical", command=cvs.yview)
+cvs.configure(yscrollcommand=ysb.set, xscrollcommand=xsb.set)
+cvs.configure(scrollregion=(0, 0, 1000, 1000))
+
 
 # Motion settings
 accuracy = 6  # (1, 10)
@@ -105,3 +111,6 @@ def loop(animation):
         root.after(_interval, loop_move)
 
     return loop_move()
+
+
+cvs.pack()

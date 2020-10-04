@@ -3,6 +3,7 @@
     <words>
       <w>coor</w>
       <w>lemn</w>
+      <w>mandelbrott</w>
       <w>nonharmonic</w>
       <w>pmax</w>
       <w>pmin</w>
@@ -10,6 +11,7 @@
       <w>qmax</w>
       <w>qmin</w>
       <w>qpoints</w>
+      <w>recache</w>
     </words>
   </dictionary>
 </component>
