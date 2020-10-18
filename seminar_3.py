@@ -5,11 +5,16 @@ import time
 class Poll(tk.Tk):
     # Settings
     BG = "black"
-    FG = "pink"
-    START_INTERVAL = 100
-    STICK_LEN = 40
+    START_INTERVAL = 200  # ms
+    STICK_LEN = 40  # px (in the start)
+    MARGIN = 20  # px
+    GAMMA = 7  # [1; 10]
+    CONTRAST = 7  # [1; 10]
+
+    assert 0 <= GAMMA <= 10, "Gamma is out of range"
+    assert 0 <= CONTRAST <= 10, "Contrast is out of range"
+    CONTRAST /= 3
     HALF_STICK = STICK_LEN // 2
-    MARGIN = 10
 
     def __init__(self, size):
         super().__init__()
@@ -23,6 +28,7 @@ class Poll(tk.Tk):
         self.paused = False
         self.zoom = 1
         self.interval = Poll.START_INTERVAL
+        self.color = self.num_to_color(1)
         self.repeat = 1
         self.onstep = 0
         self.amount = 0
@@ -65,7 +71,7 @@ class Poll(tk.Tk):
                 self.engaged_points.add(point)
             for point in points - total:
                 self.empty_points.add(point)
-            self.cvs.create_line(*self.to_raw(*p1), *self.to_raw(*p2), fill=Poll.FG)
+            self.cvs.create_line(*self.to_raw(*p1), *self.to_raw(*p2), fill=self.color)
             self.onstep += 1
             self.amount += 1
             del (points, total, p1, p2)
@@ -73,11 +79,8 @@ class Poll(tk.Tk):
     def loop(self):
         if not self.paused:
             for point in set(self.empty_points):
-                if not self.out:
-                    outs = set(map(lambda x: abs(x) + Poll.HALF_STICK >= self.size / 2, point))
-                    if True in outs:
-                        self.out = True
-                    del outs
+                if not self.out and abs(point[0]) + Poll.HALF_STICK >= self.size / 2:
+                    self.out = True
                 self.empty_points.discard(point)
                 self.create_stick(*point)
             if self.out:
@@ -89,6 +92,7 @@ class Poll(tk.Tk):
 
             print(f"{str(self.repeat) + ')':<6} on step: {self.onstep:<7} all: {self.amount}")
 
+            self.color = self.num_to_color(self.onstep)
             self.repeat += 1
             self.onstep = 0
             del point
@@ -100,7 +104,23 @@ class Poll(tk.Tk):
         self.cvs.pack()
         self.mainloop()
 
+    @staticmethod
+    def num_to_color(num):
+        FULL_CH = 255
+        HALF_CH = FULL_CH / 2
+        value = (1/num) ** (1/Poll.GAMMA) * FULL_CH
+        value = value - HALF_CH
+        minus = value < 0
+        value = (abs(value) / HALF_CH) ** (1 / Poll.CONTRAST) * HALF_CH
+        value = -value if minus else value
+        value += HALF_CH
+        value = round(value)
+        RED = FULL_CH - value
+        GREEN = 100
+        BLUE = value
+        return '#%02x%02x%02x' % (RED, GREEN, BLUE)
+
 
 if __name__ == "__main__":
-    poll = Poll(500)
+    poll = Poll(1000)
     poll.start()
