@@ -5,8 +5,8 @@ import time
 class Poll(tk.Tk):
     # Settings
     BG = "black"
-    START_INTERVAL = 500  # ms
-    STICK_LEN = 100  # px (in the start)
+    START_INTERVAL = 10  # ms
+    STICK_LEN = 40  # px (in the start)
     MARGIN = 20  # px
     AUTOZOOM = False
     ZOOM_UP = 1.1
@@ -135,14 +135,14 @@ class Poll(tk.Tk):
                             radius = point[1] + point[0]
                         else:
                             radius = point[1] - point[0]
-                        self.color = Poll.rainbow_color(radius)
+                        self.color = Poll.rainbow_color(abs(radius))
                         del radius
                     elif Poll.RAINBOW_ORIENTATION == 're':
                         if point[0] * point[1] > 0:
                             radius = point[1] / 2 + point[0]
                         else:
                             radius = point[1] / 2 - point[0]
-                        self.color = Poll.rainbow_color(radius)
+                        self.color = Poll.rainbow_color(abs(radius))
                         del radius
                 if not self.out and abs(point[0]) + Poll.HALF_STICK >= self.size / 2 and Poll.AUTOZOOM:
                     self.out = True
