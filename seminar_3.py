@@ -5,16 +5,30 @@ import time
 class Poll(tk.Tk):
     # Settings
     BG = "black"
-    START_INTERVAL = 200  # ms
-    STICK_LEN = 40  # px (in the start)
+    START_INTERVAL = 500  # ms
+    STICK_LEN = 100  # px (in the start)
     MARGIN = 20  # px
-    GAMMA = 7  # [1; 10]
-    CONTRAST = 7  # [1; 10]
-
-    assert 0 <= GAMMA <= 10, "Gamma is out of range"
-    assert 0 <= CONTRAST <= 10, "Contrast is out of range"
-    CONTRAST /= 3
+    AUTOZOOM = True
+    # Color settings
+    COLOR_MODE = "r"  # s = single; g = gradient; r = rainbow
+    # Single
+    COLOR: str = "purple"  # hex code
+    # Gradient
+    GRADIENT_GAMMA = 7  # [1; 10]
+    GRADIENT_CONTRAST = 5  # [1; 10]
+    # Rainbow
+    RAINBOW_ORIENTATION = 'c'  # v = vertical; h = horizontal; c = circle; q = square; r = rhombus; re = rhombus elongated; dr = diagonal (up-right angle); dl (up-left angle);
+    RAINBOW_RANGE = 1  # [1; 10]
+    RAINBOW_COLORS = ["#ff0000", "#ff4e00", "#ffa500", "#ffd200", "#ffff00",
+                      "#78bc00", "#008000", "#004478", "#0000ff", "#2600c1",
+                      "#4b0082", "#a145bb", "#ee82ee", "#f64279"]
+    # Don't touch
+    assert 0 <= GRADIENT_GAMMA <= 10, "GRADIENT_GAMMA is out of range"
+    assert 0 <= GRADIENT_CONTRAST <= 10, "GRADIENT_CONTRAST is out of range"
+    assert 0 <= RAINBOW_RANGE <= 10, "Rainbow_range is out of range"
+    GRADIENT_CONTRAST /= 3
     HALF_STICK = STICK_LEN // 2
+    RAINBOW_RANGE = (1 / RAINBOW_RANGE) * 2
 
     def __init__(self, size):
         super().__init__()
@@ -28,7 +42,7 @@ class Poll(tk.Tk):
         self.paused = False
         self.zoom = 1
         self.interval = Poll.START_INTERVAL
-        self.color = self.num_to_color(1)
+        self.color = Poll.gradient_color(1) if Poll.COLOR_MODE == "g" else Poll.COLOR
         self.repeat = 1
         self.onstep = 0
         self.amount = 0
@@ -79,20 +93,46 @@ class Poll(tk.Tk):
     def loop(self):
         if not self.paused:
             for point in set(self.empty_points):
-                if not self.out and abs(point[0]) + Poll.HALF_STICK >= self.size / 2:
+                if Poll.COLOR_MODE == "r":
+                    if Poll.RAINBOW_ORIENTATION == 'v':
+                        self.color = Poll.rainbow_color(abs(point[0]))
+                    elif Poll.RAINBOW_ORIENTATION == 'h':
+                        self.color = Poll.rainbow_color(abs(point[1]))
+                    elif Poll.RAINBOW_ORIENTATION == 'c':
+                        self.color = Poll.rainbow_color((point[0] ** 2 + point[1] ** 2) ** 0.5)
+                    elif Poll.RAINBOW_ORIENTATION == 'q':
+                        self.color = Poll.rainbow_color(max(map(lambda x: abs(x), point)))
+                    elif Poll.RAINBOW_ORIENTATION == 'dr':
+                        self.color = Poll.rainbow_color(point[1] - point[0])
+                    elif Poll.RAINBOW_ORIENTATION == 'dl':
+                        self.color = Poll.rainbow_color(point[1] + point[0])
+                    elif Poll.RAINBOW_ORIENTATION == 'r':
+                        if point[0] * point[1] > 0:
+                            radius = point[1] + point[0]
+                        else:
+                            radius = point[1] - point[0]
+                        self.color = Poll.rainbow_color(radius)
+                        del radius
+                    elif Poll.RAINBOW_ORIENTATION == 're':
+                        if point[0] * point[1] > 0:
+                            radius = point[1] / 2 + point[0]
+                        else:
+                            radius = point[1] / 2 - point[0]
+                        self.color = Poll.rainbow_color(radius)
+                        del radius
+                if not self.out and abs(point[0]) + Poll.HALF_STICK >= self.size / 2 and Poll.AUTOZOOM:
                     self.out = True
                 self.empty_points.discard(point)
                 self.create_stick(*point)
-            if self.out:
+            if self.out and Poll.AUTOZOOM:
                 zoom = (self.size - Poll.MARGIN * 2) / (self.repeat / 2 * Poll.STICK_LEN) / self.zoom
                 self.zoom *= zoom
                 self.cvs.scale("all", *self.center, zoom, zoom)
                 self.interval = round(poll.interval * zoom)
                 del zoom
-
+            if Poll.COLOR_MODE == "g":
+                self.color = self.gradient_color(self.onstep)
             print(f"{str(self.repeat) + ')':<6} on step: {self.onstep:<7} all: {self.amount}")
-
-            self.color = self.num_to_color(self.onstep)
             self.repeat += 1
             self.onstep = 0
             del point
@@ -103,22 +143,28 @@ class Poll(tk.Tk):
         self.loop()
         self.cvs.pack()
         self.mainloop()
-
+    
     @staticmethod
-    def num_to_color(num):
-        FULL_CH = 255
-        HALF_CH = FULL_CH / 2
-        value = (1/num) ** (1/Poll.GAMMA) * FULL_CH
-        value = value - HALF_CH
+    def rainbow_color(radius):
+        color = round((radius / Poll.STICK_LEN) * Poll.RAINBOW_RANGE) % len(Poll.RAINBOW_COLORS)
+        return Poll.RAINBOW_COLORS[color]
+        
+    @staticmethod
+    def gradient_color(num):
+        full_ch = 255
+        half_ch = full_ch / 2
+        value = (1/num) ** (1/Poll.GRADIENT_GAMMA) * full_ch
+        value = value - half_ch
         minus = value < 0
-        value = (abs(value) / HALF_CH) ** (1 / Poll.CONTRAST) * HALF_CH
+        value = (abs(value) / half_ch) ** (1 / Poll.GRADIENT_CONTRAST) * half_ch
         value = -value if minus else value
-        value += HALF_CH
+        value += half_ch
         value = round(value)
-        RED = FULL_CH - value
-        GREEN = 100
-        BLUE = value
-        return '#%02x%02x%02x' % (RED, GREEN, BLUE)
+        # Channels
+        red = full_ch - value
+        green = 100
+        blue = value
+        return '#%02x%02x%02x' % (red, green, blue)
 
 
 if __name__ == "__main__":
