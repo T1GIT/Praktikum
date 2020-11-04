@@ -5,32 +5,32 @@ import time
 class Poll(tk.Tk):
     # Settings
     BG = "black"
-    START_INTERVAL = 10  # ms
-    STICK_LEN = 40  # px (in the start)
+    START_INTERVAL = 100  # ms
+    STICK_LEN = 60  # px (in the start)
     MARGIN = 20  # px
-    AUTOZOOM = False
-    ZOOM_UP = 1.1
-    ZOOM_DOWN = 0.9
+    AUTOZOOM = True
     # Color settings
     COLOR_MODE = "r"  # s = single; g = gradient; r = rainbow
     # Single
     COLOR: str = "purple"  # hex code
     # Gradient
-    GRADIENT_GAMMA = 7  # [1; 10]
+    GRADIENT_GAMMA = 5  # [1; 10]
     GRADIENT_CONTRAST = 5  # [1; 10]
     # Rainbow
-    RAINBOW_ORIENTATION = 'c'  # v = vertical; h = horizontal; c = circle; q = square; r = rhombus; re = rhombus elongated; dr = diagonal (up-right angle); dl (up-left angle);
+    RAINBOW_ORIENTATION = 'r'  # v = vertical; h = horizontal; c = circle; q = square; r = rhombus; re = rhombus elongated; dr = diagonal (up-right angle); dl (up-left angle);
     RAINBOW_RANGE = 1  # [1; 10]
     RAINBOW_COLORS = ["#ff0000", "#ff4e00", "#ffa500", "#ffd200", "#ffff00",
                       "#78bc00", "#008000", "#004478", "#0000ff", "#2600c1",
                       "#4b0082", "#a145bb", "#ee82ee", "#f64279"]
-    # Don't touch
+    # Don't touch. System calculations
     assert 0 <= GRADIENT_GAMMA <= 10, "GRADIENT_GAMMA is out of range"
     assert 0 <= GRADIENT_CONTRAST <= 10, "GRADIENT_CONTRAST is out of range"
     assert 0 <= RAINBOW_RANGE <= 10, "Rainbow_range is out of range"
     GRADIENT_CONTRAST /= 3
     HALF_STICK = STICK_LEN // 2
     RAINBOW_RANGE = (1 / RAINBOW_RANGE) * 2
+    ZOOM_UP = 1.1
+    ZOOM_DOWN = 0.9
 
     def __init__(self, size):
         super().__init__()
