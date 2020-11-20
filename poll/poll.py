@@ -17,7 +17,9 @@ class Poll(tk.Tk):
     GRADIENT_GAMMA = 5  # [1; 10]
     GRADIENT_CONTRAST = 5  # [1; 10]
     # Rainbow
-    RAINBOW_ORIENTATION = 'r'  # v = vertical; h = horizontal; c = circle; q = square; r = rhombus; re = rhombus elongated; dr = diagonal (up-right angle); dl (up-left angle);
+    # v = vertical; h = horizontal; c = circle; q = square; r = rhombus;
+    # re = rhombus elongated; dr = diagonal (up-right angle); dl (up-left angle);
+    RAINBOW_ORIENTATION = 'r'
     RAINBOW_RANGE = 1  # [1; 10]
     RAINBOW_COLORS = ["#ff0000", "#ff4e00", "#ffa500", "#ffd200", "#ffff00",
                       "#78bc00", "#008000", "#004478", "#0000ff", "#2600c1",
@@ -55,11 +57,11 @@ class Poll(tk.Tk):
             self.canvas.bind('<B1-Motion>', self.move_to)
             self.canvas.bind("<MouseWheel>", self.zoom)
 
-    def start_pause(self, event):
+    def start_pause(self):
         """Change pause state"""
         self.paused = not self.paused
 
-    def move_from(self, event):
+    def move_from(self):
         """Remember previous coordinates"""
         self.canvas.scan_mark(event.x, event.y)
 
@@ -168,19 +170,19 @@ class Poll(tk.Tk):
         self.loop()
         self.canvas.pack()
         self.mainloop()
-    
+
     @staticmethod
     def rainbow_color(radius):
         """Returns rainbow's color"""
         color = round((radius / Poll.STICK_LEN) * Poll.RAINBOW_RANGE) % len(Poll.RAINBOW_COLORS)
         return Poll.RAINBOW_COLORS[color]
-        
+
     @staticmethod
     def gradient_color(num):
         """Returns color from the number"""
         full_ch = 255
         half_ch = full_ch / 2
-        value = (1/num) ** (1/Poll.GRADIENT_GAMMA) * full_ch
+        value = (1 / num) ** (1 / Poll.GRADIENT_GAMMA) * full_ch
         value = value - half_ch
         minus = value < 0
         value = (abs(value) / half_ch) ** (1 / Poll.GRADIENT_CONTRAST) * half_ch

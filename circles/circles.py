@@ -1,6 +1,6 @@
-from math import sin, cos, radians, degrees
+from math import sin, cos
 
-from xy_interact import move_to, circle, from_polar, root, to_center, loop, _step
+from circles.xy_interact import move_to, circle, from_polar, root, to_center, loop
 
 # Settings
 big_rad = 200
