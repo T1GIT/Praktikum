@@ -51,13 +51,22 @@ class Game(tk.Canvas):
         self.config(highlightbackground=conf.BG_CLR)
         self.pack(side=tk.LEFT)
 
-    def up_score(self):
-        self.window.overlay.counter.raise_score()
+    def up_score(self, delta=1):
+        """
+        Rises up score number in the side panel
+        """
+        self.window.overlay.counter.raise_score(delta)
 
     def up_lvl(self):
+        """
+        Rises up level number in the side panel
+        """
         self.window.overlay.counter.raise_lvl()
 
     def set_next(self, element: Detail):
+        """
+        Rising up score number in the side panel
+        """
         self.window.overlay.next.set(element)
 
     def start(self):
