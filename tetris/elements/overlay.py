@@ -2,15 +2,15 @@ import tkinter as tk
 
 from config import Configuration as conf
 from elements.game import Game
-from detail import Detail
+from field import Field
 
 
 class Overlay(tk.Frame):
     def __init__(self, window):
         self.window = window
         super().__init__(window,
-                         width=conf.SIZE // 4,
-                         height=conf.SIZE,
+                         width=conf.OVERLAY_WIDTH,
+                         height=conf.HEIGHT,
                          bg=conf.BG_CLR)
         self.pack_propagate(False)
         self.config(highlightbackground=conf.BG_CLR)
@@ -24,19 +24,22 @@ class Next(tk.Frame):
     def __init__(self, overlay):
         self.overlay = overlay
         super().__init__(overlay,
-                         width=conf.SIZE // 4,
+                         width=conf.HEIGHT // 4,
                          bg=conf.BG_CLR)
         self.pack(fill=tk.BOTH)
         self.next = tk.Label(self,
                              text="NEXT", fg=conf.TXT_CLR, bg=conf.BG_CLR,
-                             font=("Ariel", conf.SIZE // 30))
-        self.next.pack(pady=conf.SIZE // 30)
-        size = conf.SIZE // 6
-        self.next_el = tk.Canvas(self, width=size, height=size, bg=conf.BG_CLR, highlightthickness=0)
+                             font=("Ariel", conf.HEIGHT // 30))
+        self.next.pack(pady=conf.HEIGHT // 30)
+        self.overlay._width = min(conf.OVERLAY_WIDTH * 3 // 4, conf.MAX_OVERLAY_WIDTH)
+        self.next_el = tk.Canvas(self,
+                                 width=self.overlay._width,
+                                 height=self.overlay._width,
+                                 bg=conf.BG_CLR, highlightthickness=0)
         self.next_el.pack()
-        self.next_el.create_rectangle(0, 0, size - 1, size - 1, outline=conf.FG_CLR)
+        self.next_el.create_rectangle(0, 0, self.overlay._width - 1, self.overlay._width - 1, outline=conf.FG_CLR)
 
-    def set(self, detail: Detail):  # Artem's task
+    def set(self, detail: Field):  # Artem's task
         """
         Draws next dropping elements in the overlay
         :param detail: object to draw
@@ -48,14 +51,14 @@ class Counter(tk.Frame):
     def __init__(self, overlay):
         self.overlay = overlay
         super().__init__(overlay,
-                         width=conf.SIZE // 4,
+                         width=conf.HEIGHT // 4,
                          bg=conf.BG_CLR)
-        self.pack(fill=tk.BOTH, pady=conf.SIZE // 10)
+        self.pack(fill=tk.BOTH, pady=conf.HEIGHT // 10)
 
         def counter_lbl(text):
             lbl = tk.Label(self,
                            text=text, fg=conf.TXT_CLR, bg=conf.BG_CLR,
-                           font=("Ariel", conf.SIZE // 40))
+                           font=("Ariel", conf.HEIGHT // 40))
             lbl.pack()
             return lbl
 
@@ -75,11 +78,12 @@ class Button(tk.Button):
     def __init__(self, overlay):
         self.overlay = overlay
         super().__init__(overlay,
-                         text="START", font=("Ariel", conf.SIZE // 40),
-                         width=conf.SIZE // 50,
-                         fg=conf.TXT_CLR, bg=conf.BG_CLR,
+                         text="START", font=("Ariel", conf.HEIGHT // 40),
+                         width=self.overlay._width // 10,
+                         fg=conf.BG_CLR, bg=conf.FG_CLR,
+                         relief=tk.FLAT,
                          command=self.click)
-        self.pack(side=tk.BOTTOM, pady=conf.SIZE // 50)
+        self.pack(side=tk.BOTTOM, pady=self.overlay._width // 6)
 
     def click(self):
         self.overlay.window.game.start()

@@ -1,20 +1,21 @@
 import tkinter as tk
 
 from config import Configuration as conf
-from detail import Detail
+from field import Field
 
 
 class Game(tk.Canvas):
     def __init__(self, window):
         self.window = window
         super().__init__(master=window,
-                         width=conf.SIZE // 2,
-                         height=conf.SIZE,
+                         width=conf.HEIGHT * conf.FIELD_WIDTH // conf.FIELD_HEIGHT,
+                         height=conf.HEIGHT,
                          bg=conf.FG_CLR,
                          highlightthickness=0)
         self.pack_propagate(False)
         self.config(highlightbackground=conf.BG_CLR)
         self.pack(side=tk.LEFT)
+        self.field = Field(self)
 
     def up_score(self, delta=1):
         """
@@ -28,7 +29,7 @@ class Game(tk.Canvas):
         """
         self.window.overlay.counter.raise_lvl()
 
-    def set_next(self, detail: Detail):
+    def set_next(self, detail: Field):
         """
         Rising up score number in the side panel.
         :param detail: object to draw.
@@ -44,26 +45,6 @@ class Game(tk.Canvas):
             self.detail.rotate()
         elif event.keysym == 'Down':
             self.detail.fall()
-        
-    def spawn(self, detail: Detail):  # TODO: Artem's task
-        """
-        Draw and remember new moving element.
-        :param detail: object that will appear on the top.
-        """
-        pass
-
-    def is_lose(self) -> bool:  # TODO: Artem's task
-        """
-        Checks if game is finished.
-        :return: True if the top stroke has part of a detail, else - False.
-        """
-        pass
-
-    def clear_full(self):  # TODO: Artem's task
-        """
-        Erase full lines from the canvas and removes its objects from the memory.
-        Increments the Score
-        """
 
     def start(self):  # TODO: Artem's task
         """
@@ -74,11 +55,14 @@ class Game(tk.Canvas):
         """
         self.window.overlay.start.pack_forget()
         self.window.bind('<KeyPress>', self.key_press)
-        # Examples TODO: Remove after reading
-        self.detail = Detail(1)
+        # Examples TODO: Remove after reading\
         self.up_score()
         self.up_lvl()
-        self.set_next(Detail(1))  # Isn't ready
+        self.set_next(Field(1))  # Isn't ready
+        Field.draw_block(self, 0, 0, 1)
+        Field.draw_block(self, 1, 0, 2)
+        Field.draw_block(self, 0, 1, 3)
+        Field.draw_block(self, 2, 1, 4)
         """
         TODO: Here is the main process of the game
         (can allocate into the separate method
