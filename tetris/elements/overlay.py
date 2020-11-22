@@ -1,7 +1,7 @@
 import tkinter as tk
 
 from config import Configuration as conf
-from elements.game import Game
+from elements.game import Game, Detail
 
 
 class Overlay(tk.Frame):
@@ -35,7 +35,7 @@ class Next(tk.Frame):
         self.next_el.pack()
         self.next_el.create_rectangle(0, 0, size - 1, size - 1, outline=conf.FG_CLR)
 
-    def set(self, element):
+    def set(self, element: Detail):
         pass  # TODO: F: drawing next dropping element in the overlay
 
 
@@ -73,5 +73,8 @@ class Button(tk.Button):
                          text="START", font=("Ariel", conf.SIZE // 40),
                          width=conf.SIZE // 50,
                          fg=conf.TXT_CLR, bg=conf.BG_CLR,
-                         command=self.overlay.window.game.start)
+                         command=self.click)
         self.pack(side=tk.BOTTOM, pady=conf.SIZE // 50)
+
+    def click(self):
+        self.overlay.window.game.start()

@@ -13,5 +13,6 @@ class Window(tk.Tk):
         self.geometry(f"{width}x{height}")
         self.resizable(width=False, height=False)
         self.title("TETRIS")
-        self.game = Game(self)
         self.overlay = Overlay(self)
+        self.game = Game(self)
+

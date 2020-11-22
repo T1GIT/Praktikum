@@ -3,23 +3,6 @@ import tkinter as tk
 from config import Configuration as conf
 
 
-class Game(tk.Canvas):
-    def __init__(self, window):
-        self.window = window
-        super().__init__(master=window,
-                         width=conf.SIZE // 2,
-                         height=conf.SIZE,
-                         bg=conf.FG_CLR,
-                         highlightthickness=0)
-        self.pack_propagate(False)
-        self.config(highlightbackground=conf.BG_CLR)
-        self.pack(side=tk.LEFT)
-
-    def start(self):
-        self.window.overlay.counter.raise_score()
-        self.window.overlay.counter.raise_lvl()
-
-
 class Detail:
     TYPES = [
         [
@@ -55,3 +38,33 @@ class Detail:
     def fall(self):
         pass
 
+
+class Game(tk.Canvas):
+    def __init__(self, window):
+        self.window = window
+        super().__init__(master=window,
+                         width=conf.SIZE // 2,
+                         height=conf.SIZE,
+                         bg=conf.FG_CLR,
+                         highlightthickness=0)
+        self.pack_propagate(False)
+        self.config(highlightbackground=conf.BG_CLR)
+        self.pack(side=tk.LEFT)
+
+    def up_score(self):
+        self.window.overlay.counter.raise_score()
+
+    def up_lvl(self):
+        self.window.overlay.counter.raise_lvl()
+
+    def set_next(self, element: Detail):
+        self.window.overlay.next.set(element)
+
+    def start(self):
+        """
+        Starts after clicking "START"
+        """
+        # Examples
+        self.up_score()
+        self.up_lvl()
+        self.set_next(Detail(1))  # Isn't ready
