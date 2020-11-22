@@ -25,7 +25,7 @@ class Detail:
     def __init__(self, detail_type: int):
         """
         Creates new figure and draw it into the field
-        :param type: | - 0, ┳ - 2, ■ - 3, ┏ - 4, ⚡ - 5
+        :param detail_type: | - 0, ┳ - 2, ■ - 3, ┏ - 4, ⚡ - 5
         """
         pass
 
@@ -66,10 +66,18 @@ class Game(tk.Canvas):
     def set_next(self, element: Detail):
         """
         Rising up score number in the side panel
+        :param element: object to draw
         """
         self.window.overlay.next.set(element)
+        
+    def spawn(self, element: Detail):  # TODO: Artem's task
+        """
+        Draw and remember new moving element
+        :param element: object that will appear on the top
+        """
+        pass
 
-    def start(self):
+    def start(self):  # TODO: Artem's task
         """
         Starts after clicking "START"
         """

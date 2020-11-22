@@ -27,16 +27,20 @@ class Next(tk.Frame):
                          bg=conf.BG_CLR)
         self.pack(fill=tk.BOTH)
         self.next = tk.Label(self,
-                                 text="NEXT", fg=conf.TXT_CLR, bg=conf.BG_CLR,
-                                 font=("Ariel", conf.SIZE // 30))
+                             text="NEXT", fg=conf.TXT_CLR, bg=conf.BG_CLR,
+                             font=("Ariel", conf.SIZE // 30))
         self.next.pack(pady=conf.SIZE // 30)
         size = conf.SIZE // 6
         self.next_el = tk.Canvas(self, width=size, height=size, bg=conf.BG_CLR, highlightthickness=0)
         self.next_el.pack()
         self.next_el.create_rectangle(0, 0, size - 1, size - 1, outline=conf.FG_CLR)
 
-    def set(self, element: Detail):
-        pass  # TODO: F: drawing next dropping element in the overlay
+    def set(self, element: Detail):  # Artem's task
+        """
+        Draws next dropping elements in the overlay
+        :param element: object to draw
+        """
+        pass
 
 
 class Counter(tk.Frame):

@@ -1,7 +1,7 @@
 from elements.window import Window
 
 
-class Tetris():
+class Tetris:
     def __init__(self):
         self.root = Window()
 
