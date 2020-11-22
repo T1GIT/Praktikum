@@ -1,7 +1,8 @@
 import tkinter as tk
 
 from config import Configuration as conf
-from elements.game import Game, Detail
+from elements.game import Game
+from detail import Detail
 
 
 class Overlay(tk.Frame):
@@ -35,10 +36,10 @@ class Next(tk.Frame):
         self.next_el.pack()
         self.next_el.create_rectangle(0, 0, size - 1, size - 1, outline=conf.FG_CLR)
 
-    def set(self, element: Detail):  # Artem's task
+    def set(self, detail: Detail):  # Artem's task
         """
         Draws next dropping elements in the overlay
-        :param element: object to draw
+        :param detail: object to draw
         """
         pass
 

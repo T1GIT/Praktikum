@@ -1,42 +1,7 @@
 import tkinter as tk
 
 from config import Configuration as conf
-
-
-class Detail:
-    TYPES = [
-        [
-            [1, 1, 1, 1]
-        ], [
-            [1, 1, 1],
-            [0, 1, 0]
-        ], [
-            [1, 1],
-            [1, 1]
-        ], [
-            [1, 1, 1, 1],
-            [1, 0, 0, 0]
-        ], [
-            [0, 1, 1],
-            [1, 1, 0]
-        ]
-    ]
-
-    def __init__(self, detail_type: int):
-        """
-        Creates new figure and draw it into the field
-        :param detail_type: | - 0, ┳ - 2, ■ - 3, ┏ - 4, ⚡ - 5
-        """
-        pass
-
-    def rotate(self):
-        pass
-
-    def move(self, direction: int):  # 0 - down, 1 - left, 2 - right
-        pass
-
-    def fall(self):
-        pass
+from detail import Detail
 
 
 class Game(tk.Canvas):
@@ -53,35 +18,68 @@ class Game(tk.Canvas):
 
     def up_score(self, delta=1):
         """
-        Rises up score number in the side panel
+        Rises up score number in the side panel.
         """
         self.window.overlay.counter.raise_score(delta)
 
     def up_lvl(self):
         """
-        Rises up level number in the side panel
+        Rises up level number in the side panel.
         """
         self.window.overlay.counter.raise_lvl()
 
-    def set_next(self, element: Detail):
+    def set_next(self, detail: Detail):
         """
-        Rising up score number in the side panel
-        :param element: object to draw
+        Rising up score number in the side panel.
+        :param detail: object to draw.
         """
-        self.window.overlay.next.set(element)
+        self.window.overlay.next.set(detail)
+
+    def key_press(self, event):
+        if event.keysym == 'Left':
+            self.detail.left()
+        elif event.keysym == 'Right':
+            self.detail.right()
+        elif event.keysym == 'Up':
+            self.detail.rotate()
+        elif event.keysym == 'Down':
+            self.detail.fall()
         
-    def spawn(self, element: Detail):  # TODO: Artem's task
+    def spawn(self, detail: Detail):  # TODO: Artem's task
         """
-        Draw and remember new moving element
-        :param element: object that will appear on the top
+        Draw and remember new moving element.
+        :param detail: object that will appear on the top.
         """
         pass
 
+    def is_lose(self) -> bool:  # TODO: Artem's task
+        """
+        Checks if game is finished.
+        :return: True if the top stroke has part of a detail, else - False.
+        """
+        pass
+
+    def clear_full(self):  # TODO: Artem's task
+        """
+        Erase full lines from the canvas and removes its objects from the memory.
+        Increments the Score
+        """
+
     def start(self):  # TODO: Artem's task
         """
-        Starts after clicking "START"
+        Starts after clicking "START".
         """
-        # Examples
+        """
+        TODO: Here is initialising of the game
+        """
+        self.window.overlay.start.pack_forget()
+        self.window.bind('<KeyPress>', self.key_press)
+        # Examples TODO: Remove after reading
+        self.detail = Detail(1)
         self.up_score()
         self.up_lvl()
         self.set_next(Detail(1))  # Isn't ready
+        """
+        TODO: Here is the main process of the game
+        (can allocate into the separate method
+        """
