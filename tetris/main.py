@@ -1,19 +1,9 @@
-from tetris.elements import Window
+from elements.window import Window
 
 
-class Configuration:
-    # Settings
-    BG_CLR = "black"
-    FG_CLR = "gray"
-    TXT_CLR = "white"
-    ELEMENTS = ["red", "blue", "yellow", "pink", "green"]
-    START_INTERVAL = 100  # ms
-    SIZE = 500
-
-
-class Tetris:
+class Tetris():
     def __init__(self):
-        self.root = Window(Configuration)
+        self.root = Window()
 
     def start(self):
         self.root.mainloop()
