@@ -1,8 +1,7 @@
+import random as rnd
 import tkinter as tk
 
 from config import Configuration as conf
-from elements.game import Game
-from field import Field
 
 
 class Overlay(tk.Frame):
@@ -38,13 +37,19 @@ class Next(tk.Frame):
                                  bg=conf.BG_CLR, highlightthickness=0)
         self.next_el.pack()
         self.next_el.create_rectangle(0, 0, self.overlay._width - 1, self.overlay._width - 1, outline=conf.FG_CLR)
+        self.dtl_type = None
 
-    def set(self, detail: Field):  # Artem's task
+    def generate(self):  # Artem's task
         """
-        Draws next dropping elements in the overlay
-        :param detail: object to draw
+        Draws next dropping frames in the overlay
         """
-        pass
+        self.dtl_type = rnd.randint(0, len(conf.DTL_TYPES) - 1)
+        # TODO: Must to draw this figure
+
+    def pop(self):
+        last_type = self.dtl_type
+        self.generate()
+        return last_type
 
 
 class Counter(tk.Frame):
@@ -70,7 +75,7 @@ class Counter(tk.Frame):
     def raise_score(self, delta=1):
         self.score_msr["text"] = str(int(self.score_msr["text"]) + delta)
 
-    def raise_lvl(self):
+    def raise_level(self):
         self.lvl_msr["text"] = str(int(self.lvl_msr["text"]) + 1)
 
 

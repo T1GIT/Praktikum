@@ -1,8 +1,8 @@
 import tkinter as tk
 
 from config import Configuration as conf
-from elements.game import Game
-from elements.overlay import Overlay
+from frames.game import Game
+from frames.overlay import Overlay
 
 
 class Window(tk.Tk):

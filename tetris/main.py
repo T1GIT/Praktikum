@@ -1,4 +1,4 @@
-from elements.window import Window
+from frames.window import Window
 
 
 class Tetris:

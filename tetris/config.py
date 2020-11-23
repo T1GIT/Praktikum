@@ -17,8 +17,26 @@ class Configuration:
     OVERLAY_WIDTH = HEIGHT // 4  # px
     FIELD_WIDTH = 10  # blocks
     FIELD_HEIGHT = 20  # blocks
-    DTL_BORDER_WIDTH = 10
+    DTL_BORDER_WIDTH = 4
+    DTL_TYPES = [
+        [
+            [1, 1, 1, 1]
+        ], [
+            [1, 1, 1],
+            [0, 1, 0]
+        ], [
+            [1, 1],
+            [1, 1]
+        ], [
+            [1, 1, 1],
+            [1, 0, 0]
+        ], [
+            [0, 1, 1],
+            [1, 1, 0]
+        ]
+    ]
     # Don't touch
     MAX_OVERLAY_WIDTH = HEIGHT // 3
     DTL_BRD_CLR = list(map(get_border_clr, DTL_CLR))
     DTL_OFFSET = DTL_BORDER_WIDTH // 2
+    DTL_SIZE = HEIGHT // FIELD_HEIGHT
