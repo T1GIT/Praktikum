@@ -11,7 +11,7 @@ class Configuration:
     BG_CLR = "#111"
     FG_CLR = "gray"
     TXT_CLR = "white"
-    DTL_CLR = ["#515BD4", "#69E641", "#F3455D", "#F9C946", "#8F46D1"]
+    DTL_CLR = ["#515BD4", "#69E641", "#F3455D", "#F9C946", "#8F46D1", "#5F9EA0", "#228B22"]
     START_INTERVAL = 100  # ms
     HEIGHT = 500  # window's height, px
     OVERLAY_WIDTH = HEIGHT // 4  # px
@@ -30,6 +30,12 @@ class Configuration:
         ], [
             [1, 1, 1],
             [1, 0, 0]
+        ], [
+            [1, 1, 1],
+            [0, 0, 1]
+        ], [
+            [1, 1, 0],
+            [0, 1, 1]
         ], [
             [0, 1, 1],
             [1, 1, 0]

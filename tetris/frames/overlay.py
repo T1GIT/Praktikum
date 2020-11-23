@@ -1,7 +1,8 @@
 import random as rnd
 import tkinter as tk
 
-from config import Configuration as conf
+from tetris.config import Configuration as conf
+from tetris.frames.field import Field as fl
 
 
 class Overlay(tk.Frame):
@@ -38,16 +39,30 @@ class Next(tk.Frame):
         self.next_el.pack()
         self.next_el.create_rectangle(0, 0, self.overlay._width - 1, self.overlay._width - 1, outline=conf.FG_CLR)
         self.dtl_type = None
+        self.block = []
 
-    def generate(self):  # Artem's task
+    def generate(self):
         """
         Draws next dropping frames in the overlay
         """
         self.dtl_type = rnd.randint(0, len(conf.DTL_TYPES) - 1)
-        # TODO: Must to draw this figure
+        width = len(conf.DTL_TYPES[self.dtl_type][0])
+        left_margin = 2 - width / 2
+        for row_ind, row in enumerate(conf.DTL_TYPES[self.dtl_type]):
+            for col_ind, col in enumerate(row):
+                if col == 1:
+                    self.block.append(fl.draw_block(
+                        canvas=self.next_el,
+                        x=left_margin + col_ind,
+                        y=1 + row_ind,
+                        color=self.dtl_type
+                    ))
 
     def pop(self):
         last_type = self.dtl_type
+        for el in self.block:
+            self.next_el.delete(el)
+        self.block = []
         self.generate()
         return last_type
 

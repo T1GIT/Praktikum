@@ -1,4 +1,8 @@
 # Praktikum of programming
 
 #### Dmitrij Derbin
-#### PI19-5
+
+#### Bakanov Artem :)
+
+##### Financial University
+##### PI19-5
