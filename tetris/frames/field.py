@@ -26,12 +26,15 @@ class Field:
         for row_ind, row in enumerate(template):
             for col_ind, col in enumerate(row):
                 if col == 1:
-                    self.moving[row_ind][col_ind] = self.draw_block(
+                    block = self.draw_block(
                         canvas=self.cvs,
                         x=left_margin + col_ind,
                         y=-height + row_ind,
                         color=dtl_type
                     )
+                    block.x = col_ind
+                    block.y = row_ind
+                    self.moving[row_ind][col_ind] = block
 
     def clear_full(self):  # TODO: Artem's task
         """
