@@ -12,7 +12,8 @@ class Configuration:
     FG_CLR = "gray"
     TXT_CLR = "white"
     DTL_CLR = ["#515BD4", "#69E641", "#F3455D", "#F9C946", "#8F46D1", "#5F9EA0", "#228B22"]
-    START_INTERVAL = 100  # ms
+    START_INTERVAL = 350  # ms
+    START_LEVEL = 1
     HEIGHT = 500  # window's height, px
     OVERLAY_WIDTH = HEIGHT // 4  # px
     FIELD_WIDTH = 10  # blocks
@@ -20,23 +21,31 @@ class Configuration:
     DTL_BORDER_WIDTH = 4
     DTL_TYPES = [
         [
-            [1, 1, 1, 1]
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [1, 1, 1, 1],
+            [0, 0, 0, 0]
         ], [
+            [0, 0, 0],
             [1, 1, 1],
             [0, 1, 0]
         ], [
             [1, 1],
             [1, 1]
         ], [
+            [0, 0, 0],
             [1, 1, 1],
             [1, 0, 0]
         ], [
+            [0, 0, 0],
             [1, 1, 1],
             [0, 0, 1]
         ], [
+            [0, 0, 0],
             [1, 1, 0],
             [0, 1, 1]
         ], [
+            [0, 0, 0],
             [0, 1, 1],
             [1, 1, 0]
         ]

@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from tetris.config import Configuration as conf
+from config import Configuration as conf
 
 
 class Field:
@@ -35,12 +35,27 @@ class Field:
                     )
                     self.moving[row_ind][col_ind] = block
 
-    def clear_full(self):  # TODO: Artem's task
+    def clear_full(self):
         """
         Erase full lines from the canvas and removes its objects from the memory.
         Increases the score and the level
         """
         fulls = 0
+        counter = 0
+        while counter < conf.FIELD_HEIGHT:
+            if None not in self.fallen[counter]:
+                for i in self.fallen:
+                    if self.fallen[counter] == i:
+                        break
+                    for j in i:
+                        if j is not None:
+                            self.cvs.move(j, 0, conf.DTL_SIZE)
+                for i in self.fallen[counter]:
+                    self.cvs.delete(i)
+                self.fallen.remove(self.fallen[counter])
+                self.fallen.insert(0, [None] * conf.FIELD_WIDTH)
+                fulls += 1
+            counter += 1
         return fulls
 
     def is_lose(self) -> bool:
@@ -54,6 +69,8 @@ class Field:
         return False
 
     def left(self):
+        if self.moving is None:
+            return False
         for q in self.moving:
             for k in q:
                 if k is not None:
@@ -69,6 +86,8 @@ class Field:
         return True
 
     def right(self):
+        if self.moving is None:
+            return False
         for q in self.moving:
             for k in q:
                 if k is not None:
@@ -80,19 +99,54 @@ class Field:
         for i in self.moving:
             for j in i:
                 if j is not None:
-                    # print(self.cvs.coords(j)[2] // conf.DTL_SIZE, self.cvs.coords(j)[3] // conf.DTL_SIZE)
                     self.cvs.move(j, conf.DTL_SIZE, 0)
         return True
 
     def rotate(self):
-        # ...
-        return [list(t) for t in zip(*reversed(self.moving))]
+        buf_len = 0
+        if self.moving is None:
+            return self
+        if len(self.moving) > 2:
+            buf_len = len(self.moving)
+        elif len(self.moving[0]) > 2:
+            buf_len = len(self.moving[0])
+        if buf_len > 2:
+            if not self.can_rotate():
+                return False
+            for row_ind, row in enumerate(self.moving):
+                for col_ind, col in enumerate(row):
+                    if col is not None:
+                        dx = len(self.moving) - row_ind - col_ind - 1
+                        dy = col_ind - row_ind
+                        self.cvs.move(col, dx * conf.DTL_SIZE, dy * conf.DTL_SIZE)
+            self.moving = [list(t) for t in zip(*reversed(self.moving))]
+
+    def can_rotate(self):
+        for row_ind, row in enumerate(self.moving):
+            for col_ind, col in enumerate(row):
+                if col is not None:
+                    x = int(self.cvs.coords(col)[0] // conf.DTL_SIZE)
+                    y = int(self.cvs.coords(col)[1] // conf.DTL_SIZE)
+                    dx = x + len(self.moving) - row_ind - col_ind - 1
+                    dy = y + col_ind - row_ind
+                    if not 0 <= dx < conf.FIELD_WIDTH:
+                        return False
+                    elif dy < 0:
+                        continue
+                    elif dy >= conf.FIELD_HEIGHT:
+                        return False
+                    elif self.fallen[dy][dx] is not None:
+                        return False
+        return True
 
     def fall(self):
+        if self.moving is not None:
+            self.move()
+
+    def falling(self):
         """
         Clears moving element and places its blocks into the fallen
         """
-        self.is_fallen = True
         for i in reversed(self.moving):
             for j in reversed(i):
                 if j is not None:
@@ -108,7 +162,7 @@ class Field:
         """
         Move element on the field
         """
-        if self.is_fallen:
+        if self.is_fallen or self.moving is None:
             return False
         for q in reversed(self.moving):
             for k in q:
@@ -117,7 +171,7 @@ class Field:
                     y = int(self.cvs.coords(k)[3] // conf.DTL_SIZE)
                     if 0 <= y < 20 and 0 <= x < 20:
                         if y > conf.FIELD_HEIGHT - 2 or self.fallen[y + 1][x] is not None:
-                            self.fall()
+                            self.falling()
                             return False
         for i in self.moving:
             for j in i:

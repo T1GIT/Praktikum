@@ -1,8 +1,8 @@
 import tkinter as tk
 import random as rnd
 
-from tetris.config import Configuration as conf
-from tetris.frames.field import Field
+from config import Configuration as conf
+from frames.field import Field
 
 
 class Game(tk.Canvas):
@@ -30,7 +30,7 @@ class Game(tk.Canvas):
         elif event.keysym == 'Down':
             self.field.fall()
 
-    def start(self):  # TODO: Artem's task
+    def start(self):
         """
         Starts after clicking "START".
         """
@@ -44,15 +44,16 @@ class Game(tk.Canvas):
                 if not self.field.move():
                     self.field.is_fallen = False
                     self.field.spawn(self.next.pop())
-            if self.field.clear_full():
-                self.window.overlay.counter.raise_score()
-                if int(self.window.overlay.counter.score_msr["text"] % 8 == 0):
-                    self.window.overlay.counter.raise_level()
+            points = self.field.clear_full()
+            self.window.overlay.counter.raise_score(points * 100)
+            if (self.window.overlay.counter.score_ind - (points - 1)) % 8 == 0 and points != 0:
+                self.window.overlay.counter.raise_level()
+
         self.loop(action)
 
     def loop(self, animation):
         def loop_move():
             animation()
-            self.window.after(conf.START_INTERVAL, loop_move)
+            self.window.after(max(20, conf.START_INTERVAL - 25 * (self.window.overlay.counter.level_ind - 1)), loop_move)
 
         return loop_move()

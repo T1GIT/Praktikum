@@ -1,8 +1,8 @@
 import random as rnd
 import tkinter as tk
 
-from tetris.config import Configuration as conf
-from tetris.frames.field import Field as fl
+from config import Configuration as conf
+from frames.field import Field as fl
 
 
 class Overlay(tk.Frame):
@@ -45,16 +45,21 @@ class Next(tk.Frame):
         """
         Draws next dropping frames in the overlay
         """
+        ext = 0
         self.dtl_type = rnd.randint(0, len(conf.DTL_TYPES) - 1)
         width = len(conf.DTL_TYPES[self.dtl_type][0])
         left_margin = 2 - width / 2
+        if width < 3:
+            ext = 1
+        elif width > 3:
+            ext = -1
         for row_ind, row in enumerate(conf.DTL_TYPES[self.dtl_type]):
             for col_ind, col in enumerate(row):
                 if col == 1:
                     self.block.append(fl.draw_block(
                         canvas=self.next_el,
                         x=left_margin + col_ind,
-                        y=1 + row_ind,
+                        y=ext + row_ind,
                         color=self.dtl_type
                     ))
 
@@ -74,6 +79,8 @@ class Counter(tk.Frame):
                          width=conf.HEIGHT // 4,
                          bg=conf.BG_CLR)
         self.pack(fill=tk.BOTH, pady=conf.HEIGHT // 10)
+        self.score_ind = 0
+        self.level_ind = conf.START_LEVEL
 
         def counter_lbl(text):
             lbl = tk.Label(self,
@@ -85,13 +92,15 @@ class Counter(tk.Frame):
         self.score = counter_lbl("SCORE")
         self.score_msr = counter_lbl("0")
         self.lvl = counter_lbl("LEVEL")
-        self.lvl_msr = counter_lbl("1")
+        self.lvl_msr = counter_lbl(str(conf.START_LEVEL))
 
     def raise_score(self, delta=1):
         self.score_msr["text"] = str(int(self.score_msr["text"]) + delta)
+        self.score_ind += (delta // 100)
 
     def raise_level(self):
         self.lvl_msr["text"] = str(int(self.lvl_msr["text"]) + 1)
+        self.level_ind += 1
 
 
 class Button(tk.Button):

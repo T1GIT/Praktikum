@@ -1,8 +1,8 @@
 import tkinter as tk
 
-from tetris.config import Configuration as conf
-from tetris.frames.game import Game
-from tetris.frames.overlay import Overlay
+from config import Configuration as conf
+from frames.game import Game
+from frames.overlay import Overlay
 
 
 class Window(tk.Tk):
