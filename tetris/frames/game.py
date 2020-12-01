@@ -1,7 +1,8 @@
 import tkinter as tk
+import random as rnd
 
 from config import Configuration as conf
-from field import Field
+from frames.field import Field
 
 
 class Game(tk.Canvas):
@@ -29,22 +30,30 @@ class Game(tk.Canvas):
         elif event.keysym == 'Down':
             self.field.fall()
 
-    def start(self):  # TODO: Artem's task
+    def start(self):
         """
         Starts after clicking "START".
-        """
-        """
-        TODO: Here is initialising of the game
         """
         self.window.overlay.start.pack_forget()
         self.next.generate()
         self.window.bind('<KeyPress>', self.key_press)
-        # -----------------------------------------------------Examples TODO: Remove after reading
-        self.counter.raise_score()
-        self.counter.raise_level()
         self.field.spawn(self.next.pop())
-        # ----------------------------------------------------End of examples
-        """
-        TODO: Here is the main process of the game
-        (can allocate into the separate method
-        """
+
+        def action():
+            if not self.field.is_lose():
+                if not self.field.move():
+                    self.field.is_fallen = False
+                    self.field.spawn(self.next.pop())
+            points = self.field.clear_full()
+            self.window.overlay.counter.raise_score(points * 100)
+            if (self.window.overlay.counter.score_ind - (points - 1)) % 8 == 0 and points != 0:
+                self.window.overlay.counter.raise_level()
+
+        self.loop(action)
+
+    def loop(self, animation):
+        def loop_move():
+            animation()
+            self.window.after(max(20, conf.START_INTERVAL - 25 * (self.window.overlay.counter.level_ind - 1)), loop_move)
+
+        return loop_move()

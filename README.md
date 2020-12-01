@@ -3,4 +3,8 @@
 My mini-projects using Tkinter
 
 #### Dmitrij Derbin
-#### PI19-5
+
+#### Bakanov Artem :)
+
+##### Financial University
+##### PI19-5
