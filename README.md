@@ -1,8 +1,6 @@
-<p align="center">Praktice of Programming<p>
+# Praktice of Programming
 
-
-
-
+My mini-projects using Tkinter
 
 #### Dmitrij Derbin
 #### PI19-5
